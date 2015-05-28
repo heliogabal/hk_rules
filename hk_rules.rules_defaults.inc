@@ -30,7 +30,9 @@ function hk_rules_default_rules_configuration() {
           }
         }
       ],
-      "DO" : [ { "redirect" : { "url" : "admin\\/content\\/dash" } } ]
+      "DO" : [
+        { "redirect" : { "url" : "de\\/admin\\/content\\/dash", "destination" : "1" } }
+      ]
     }
   }');
   $items['rules_e_mail_to_client_and_office_when_inquiry_sent'] = entity_import('rules_config', '{ "rules_e_mail_to_client_and_office_when_inquiry_sent" : {
