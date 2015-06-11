@@ -31,7 +31,7 @@ function hk_rules_default_rules_configuration() {
         }
       ],
       "DO" : [
-        { "redirect" : { "url" : "de\\/admin\\/content\\/dash", "destination" : "1" } }
+        { "redirect" : { "url" : "\\/de\\/admin\\/content\\/dash", "destination" : "1" } }
       ]
     }
   }');
