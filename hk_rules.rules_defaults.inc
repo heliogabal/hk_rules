@@ -9,6 +9,30 @@
  */
 function hk_rules_default_rules_configuration() {
   $items = array();
+  $items['hk_rules_after_login_redirect_translate_users_to_dash'] = entity_import('rules_config', '{ "hk_rules_after_login_redirect_translate_users_to_dash" : {
+      "LABEL" : "After login redirect translate users to dash",
+      "PLUGIN" : "reaction rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "custom" ],
+      "REQUIRES" : [ "rules" ],
+      "ON" : { "user_login" : [] },
+      "IF" : [
+        { "NOT text_matches" : {
+            "text" : [ "site:current-page:path" ],
+            "match" : "^user\\/reset",
+            "operation" : "regex"
+          }
+        },
+        { "user_has_role" : {
+            "account" : [ "account" ],
+            "roles" : { "value" : { "5" : "5" } },
+            "operation" : "OR"
+          }
+        }
+      ],
+      "DO" : [ { "redirect" : { "url" : "translate" } } ]
+    }
+  }');
   $items['rules_after_login_redirect_admin_users_to_dashboard'] = entity_import('rules_config', '{ "rules_after_login_redirect_admin_users_to_dashboard" : {
       "LABEL" : "After login redirect admin users to dashboard",
       "PLUGIN" : "reaction rule",
@@ -25,7 +49,7 @@ function hk_rules_default_rules_configuration() {
         },
         { "user_has_role" : {
             "account" : [ "account" ],
-            "roles" : { "value" : { "4" : "4" } },
+            "roles" : { "value" : { "3" : "3", "4" : "4", "7" : "7" } },
             "operation" : "OR"
           }
         }
@@ -39,7 +63,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to client when inquiry sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
@@ -59,7 +83,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to client when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -79,7 +103,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -99,7 +123,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when inquiry sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
@@ -136,11 +160,96 @@ function hk_rules_default_rules_configuration() {
       "DO" : [
         { "mail_to_users_of_role" : {
             "roles" : { "value" : { "3" : "3" } },
-            "subject" : "[Webite]: [node:title] ist fertig zur Ver\\u00f6ffentlichung",
+            "subject" : "[Website]: [node:title] ist fertig zur Ver\\u00f6ffentlichung",
             "message" : "\\u0022[node:title]\\u0022 ist von [node:author] zur Ver\\u00f6ffentlichung freigegeben worden. \\r\\n\\r\\nBitte bald \\u00fcberpr\\u00fcfen und ver\\u00f6ffentlichen!\\r\\n\\r\\nDirekter Link: [site:url]\\/node\\/[node:nid]"
           }
         }
       ]
+    }
+  }');
+  $items['rules_favoriten_anfrage'] = entity_import('rules_config', '{ "rules_favoriten_anfrage" : {
+      "LABEL" : "Favoriten Anfrage",
+      "PLUGIN" : "rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "custom" ],
+      "REQUIRES" : [ "path", "rules" ],
+      "IF" : [
+        { "path_has_alias" : { "source" : "favoriten\\r\\n", "language" : "de" } },
+        { "OR" : [] },
+        { "path_has_alias" : { "source" : "favorites", "language" : "en" } }
+      ],
+      "DO" : [ { "views_rules_collect_rows" : [] } ]
+    }
+  }');
+  $items['rules_kopiere_geodaten_vom_kiez_schattenobjekt'] = entity_import('rules_config', '{ "rules_kopiere_geodaten_vom_kiez_schattenobjekt" : {
+      "LABEL" : "Kopiere Geodaten vom Kiez Schattenobjekt",
+      "PLUGIN" : "rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "entity_rules_create" ],
+      "REQUIRES" : [ "rules" ],
+      "USES VARIABLES" : {
+        "entity" : { "label" : "Entity", "type" : "entity" },
+        "continue" : { "label" : "Continue Rules", "type" : "boolean" }
+      },
+      "IF" : [
+        { "entity_has_field" : { "entity" : [ "entity" ], "field" : "field_apart_kiez_schattenobjekt" } },
+        { "NOT data_is_empty" : { "data" : [ "entity:field-apart-kiez-schattenobjekt" ] } },
+        { "entity_has_field" : { "entity" : [ "entity" ], "field" : "field_apart_schattengebiet_wkt" } },
+        { "entity_has_field" : {
+            "entity" : [ "entity:field-apart-kiez-schattenobjekt" ],
+            "field" : "field_kiez_gebiet_schattenobjekt"
+          }
+        }
+      ],
+      "DO" : [
+        { "data_set" : {
+            "data" : [ "entity:field-apart-schattengebiet-wkt" ],
+            "value" : [
+              "entity:field-apart-kiez-schattenobjekt:field-kiez-gebiet-schattenobjekt"
+            ]
+          }
+        },
+        { "entity_save" : { "data" : [ "entity" ] } }
+      ],
+      "PROVIDES VARIABLES" : [ "continue" ]
+    }
+  }');
+  $items['rules_kopiere_geodaten_vom_kiez_schattenobjekt_update_'] = entity_import('rules_config', '{ "rules_kopiere_geodaten_vom_kiez_schattenobjekt_update_" : {
+      "LABEL" : "Kopiere Geodaten vom Kiez Schattenobjekt (update)",
+      "PLUGIN" : "rule",
+      "OWNER" : "rules",
+      "TAGS" : [ "entity_rules_update" ],
+      "REQUIRES" : [ "rules" ],
+      "USES VARIABLES" : {
+        "entity" : { "label" : "Entity", "type" : "entity" },
+        "continue" : { "label" : "Continue Rules", "type" : "boolean" }
+      },
+      "IF" : [
+        { "entity_has_field" : { "entity" : [ "entity" ], "field" : "field_apart_kiez_schattenobjekt" } },
+        { "NOT data_is_empty" : { "data" : [ "entity:field-apart-kiez-schattenobjekt" ] } },
+        { "entity_has_field" : {
+            "entity" : [ "entity:field-apart-kiez-schattenobjekt" ],
+            "field" : "field_kiez_gebiet_schattenobjekt"
+          }
+        },
+        { "entity_has_field" : {
+            "entity" : [ "entity:field-apart-kiez-schattenobjekt" ],
+            "field" : "field_kiez_gebiet_schattenobjekt"
+          }
+        },
+        { "entity_has_field" : { "entity" : [ "entity" ], "field" : "field_apart_schattengebiet_wkt" } }
+      ],
+      "DO" : [
+        { "data_set" : {
+            "data" : [ "entity:field-apart-schattengebiet-wkt" ],
+            "value" : [
+              "entity:field-apart-kiez-schattenobjekt:field-kiez-gebiet-schattenobjekt"
+            ]
+          }
+        },
+        { "entity_save" : { "data" : [ "entity" ] } }
+      ],
+      "PROVIDES VARIABLES" : [ "continue" ]
     }
   }');
   $items['rules_publish_content_when_workflow_state_active'] = entity_import('rules_config', '{ "rules_publish_content_when_workflow_state_active" : {
