@@ -136,6 +136,7 @@ function hk_rules_default_rules_configuration() {
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
       "REQUIRES" : [ "rules", "rules_i18n", "mimemail", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
@@ -158,7 +159,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to client when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -178,7 +179,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -198,7 +199,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when inquiry sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
