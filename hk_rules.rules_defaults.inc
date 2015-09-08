@@ -37,11 +37,6 @@ function hk_rules_default_rules_configuration() {
             "PROVIDE" : { "rules_download_file" : { "rules_downloaded_expose" : "Downloaded Expos\\u00e9" } }
           }
         },
-        { "data_set" : {
-            "data" : [ "node:field-apart-expose:file" ],
-            "value" : [ "rules-downloaded-expose" ]
-          }
-        },
         { "entity_save" : { "data" : [ "node" ] } },
         { "drupal_message" : {
             "message" : "Expos\\u00e9 \\u003Ca href=\\u0022[rules-downloaded-expose:download-url]\\u0022\\u003E[rules-downloaded-expose:name]\\u003C\\/a\\u003E ist erstellt worden.",
@@ -136,7 +131,6 @@ function hk_rules_default_rules_configuration() {
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
       "REQUIRES" : [ "rules", "rules_i18n", "mimemail", "crm_core_activity" ],
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
@@ -159,7 +153,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to client when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -179,7 +173,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -199,7 +193,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when inquiry sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
@@ -251,7 +245,7 @@ function hk_rules_default_rules_configuration() {
         { "OR" : [] },
         { "path_has_alias" : { "source" : "favorites", "language" : "en" } }
       ],
-      "DO" : [ { "views_rules_collect_rows" : [] } ]
+      "DO" : []
     }
   }');
   $items['rules_kopiere_geodaten_vom_kiez_schattenobjekt'] = entity_import('rules_config', '{ "rules_kopiere_geodaten_vom_kiez_schattenobjekt" : {
