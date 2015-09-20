@@ -49,6 +49,8 @@ function hk_rules_default_rules_configuration() {
   $items['hk_rules_after_login_redirect_translate_users_to_dash'] = entity_import('rules_config', '{ "hk_rules_after_login_redirect_translate_users_to_dash" : {
       "LABEL" : "After login redirect translate users to dash",
       "PLUGIN" : "reaction rule",
+      "WEIGHT" : "-10",
+      "ACTIVE" : false,
       "OWNER" : "rules",
       "TAGS" : [ "custom" ],
       "REQUIRES" : [ "rules" ],
@@ -130,20 +132,21 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to client when inquiry sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "mimemail", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "mimemail", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
-        { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
+        { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } },
+        { "data_is" : { "data" : [ "site:current-page:language" ], "value" : "en" } }
       ],
       "DO" : [
         { "mimemail" : {
             "key" : "[crm-core-activity:activity-id]",
             "to" : [ "crm-core-activity:field-activity-participants:1:primary-email" ],
-            "subject" : "Ihre Anfrage zu [crm-core-activity:field-angefragte-wohnung]",
-            "body" : "\\u003Cimg href=\\u0022http:\\/\\/hk.new.drupalforgood.eu\\/sites\\/all\\/themes\\/hk_theme\\/logo.png\\u0022 width=\\u0022165\\u0022 height=\\u002290\\u0022 alt=\\u0022Herbert+Kohlmeyer Immobilien GmbH Logo\\u0022 \\/\\u003E\\u003Cbr \\/\\u003E\\r\\n\\u003Ch4\\u003ESehr geehrte\\/r [crm-core-activity:field-activity-participants:1:contact_id],\\u003C\\/h4\\u003E\\r\\n\\r\\n\\u003Cp\\u003Evielen Dank f\\u00fcr Ihre Anfrage. Wir melden uns umgehend bei Ihnen mit weiteren Informationen. Anbei erhalten SIe bereits jetzt ein Informationsblatt zum neuen Widerrufsrecht und ihre Widerrufsbelehrung.\\u003C\\/p\\u003E\\r\\n\\r\\n\\u003Cp\\u003EIhr Herbert + Kohlmeyer Team\\u003C\\/p\\u003E",
-            "plaintext" : "Hallo,\\r\\n\\r\\nvielen Dank f\\u00fcr Ihre Anfrage. Wir melden uns umgehend bei Ihnen mit weiteren Informationen. Anbei erhalten Sie bereits jetzt ein Informationsblatt zum neuen Widerrufsrecht und ihre Widerrufsbelehrung.\\r\\n\\r\\nIhr Herbert + Kohlmeyer Team",
-            "attachments" : "sites\\/hk.new.drupalforgood.eu\\/files\\/hk_informationen_zur_widerrufsbelehrung.pdf\\r\\nsites\\/hk.new.drupalforgood.eu\\/files\\/hk_widerrufsbelehrung.pdf",
-            "language" : "de"
+            "subject" : "Your inquiry for [crm-core-activity:field-angefragte-wohnung]",
+            "body" : "\\u003Ch4\\u003EThank you for your inquiry\\u003C\\/h4\\u003E\\r\\n\\u003Cp\\u003E We\\u0027ll get back to you as soon as possible. In the meantime, please find attached some important information concerning the new German withdrawal law and your notification about your withdrawal rights.\\u003C\\/p\\u003E\\r\\n\\u003Cp\\u003EYour Herbert + Kohlmeyer Team\\u003C\\/p\\u003E",
+            "plaintext" : "Thank you for your inquiry.\\r\\n\\r\\nWe\\u0027ll get back to you as soon as possible. In the meantime, please find attached some important information concerning the new German withdrawal law and your notification about your withdrawal rights.\\r\\n\\r\\nYour Herbert + Kohlmeyer Team",
+            "attachments" : "sites\\/herbert-kohlmeyer.de\\/files\\/hk_informationen_zur_widerrufsbelehrung.pdf\\r\\nsites\\/herbert-kohlmeyer.de\\/files\\/hk_widerrufsbelehrung.pdf",
+            "language" : "en"
           }
         }
       ]
@@ -153,7 +156,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to client when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -173,7 +176,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when contact form sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "kontaktformular" } }
@@ -193,7 +196,7 @@ function hk_rules_default_rules_configuration() {
       "LABEL" : "E-Mail to office when inquiry sent",
       "PLUGIN" : "reaction rule",
       "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "rules_i18n", "crm_core_activity" ],
+      "REQUIRES" : [ "rules", "crm_core_activity" ],
       "ON" : { "crm_core_activity_insert" : [] },
       "IF" : [
         { "data_is" : { "data" : [ "crm-core-activity:type" ], "value" : "anfrage" } }
